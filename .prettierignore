@@ -1,0 +1,10 @@
+# ignore all
+/*
+
+# except
+!/tests
+!/migrations
+
+# ignore
+/**/package-lock.json
+/*.md
