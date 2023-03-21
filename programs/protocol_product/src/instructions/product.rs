@@ -1,6 +1,8 @@
 use crate::error::ProductError;
 use crate::state::product::Product;
 use anchor_lang::prelude::*;
+use rust_decimal::prelude::FromPrimitive;
+use rust_decimal::Decimal;
 
 // create product/protocol configuration account
 pub fn create_product(
@@ -54,10 +56,14 @@ fn validate_commission_rate(commission_rate: f64) -> Result<()> {
         (0.0..=100.0).contains(&commission_rate),
         ProductError::InvalidCommissionRate
     );
+
+    let decimal = Decimal::from_f64(commission_rate).unwrap();
+    let decimal_with_scale = decimal.trunc_with_scale(3);
     require!(
-        (format!("{commission_rate}")).len() <= (format!("{commission_rate:.3}")).len(),
+        decimal.eq(&decimal_with_scale),
         ProductError::CommissionPrecisionTooLarge
     );
+
     Ok(())
 }
 
@@ -205,7 +211,7 @@ mod tests {
             commission_rate: 0.0,
         };
 
-        let result = update_product_commission_rate(&mut product, 99.1111);
+        let result = update_product_commission_rate(&mut product, 99.9999);
 
         let expected_error = Err(error!(ProductError::CommissionPrecisionTooLarge));
         assert_eq!(expected_error, result);
