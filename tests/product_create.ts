@@ -49,4 +49,24 @@ describe("Product Creation", () => {
       assert.equal(e.error.errorCode.code, "CommissionPrecisionTooLarge");
     }
   });
+
+  it("Invalid title - title is empty or blank", async () => {
+    try {
+      await protocolProduct.createProduct("", 99);
+      assert.fail(
+        "Test passed, but should have errored with ProductTitleEmpty",
+      );
+    } catch (e) {
+      assert.equal(e.error.errorCode.code, "ProductTitleEmpty");
+    }
+
+    try {
+      await protocolProduct.createProduct("  ", 99);
+      assert.fail(
+        "Test passed, but should have errored with ProductTitleEmpty",
+      );
+    } catch (e) {
+      assert.equal(e.error.errorCode.code, "ProductTitleEmpty");
+    }
+  });
 });

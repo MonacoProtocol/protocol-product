@@ -11,7 +11,7 @@ pub struct Product {
 }
 
 impl Product {
-    pub const PRODUCT_TITLE_MAX_LENGTH: usize = 50;
+    pub const PRODUCT_TITLE_MAX_LENGTH: usize = 32;
     pub const SIZE: usize = DISCRIMINATOR_SIZE +
         (PUB_KEY_SIZE * 3) + // authority, payer and commission_escrow
         vec_size (CHAR_SIZE, Product::PRODUCT_TITLE_MAX_LENGTH) + // product_title

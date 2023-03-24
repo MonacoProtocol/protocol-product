@@ -16,8 +16,8 @@ pub fn create_product(
     validate_commission_rate(commission_rate)?;
 
     require!(
-        (1..=50).contains(&product_title.len()),
-        ProductError::ProductTitleLen
+        !&product_title.trim().is_empty(),
+        ProductError::ProductTitleEmpty
     );
 
     product.authority = *authority;
@@ -137,7 +137,7 @@ mod tests {
     }
 
     #[test]
-    fn test_title_length_validation() {
+    fn test_title_must_not_be_empty_validation() {
         let mut empty_product_account = Product {
             authority: Default::default(),
             payer: Default::default(),
@@ -150,11 +150,11 @@ mod tests {
             &mut empty_product_account,
             &Pubkey::new_unique(),
             &Pubkey::new_unique(),
-            "123456789012345678901234567890123456789012345678901".to_string(),
+            "    ".to_string(),
             99.99,
             &Pubkey::new_unique(),
         );
-        let expected_error = Err(error!(ProductError::ProductTitleLen));
+        let expected_error = Err(error!(ProductError::ProductTitleEmpty));
         assert_eq!(expected_error, result);
 
         let result = create_product(
@@ -165,7 +165,7 @@ mod tests {
             99.99,
             &Pubkey::new_unique(),
         );
-        let expected_error = Err(error!(ProductError::ProductTitleLen));
+        let expected_error = Err(error!(ProductError::ProductTitleEmpty));
         assert_eq!(expected_error, result);
     }
 
