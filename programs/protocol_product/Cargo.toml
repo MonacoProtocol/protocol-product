@@ -1,6 +1,6 @@
 [package]
 name = "protocol_product"
-version = "0.1.0"
+version = "0.2.0"
 description = "Program for creating and managing products built on the Monaco Protocol"
 edition = "2021"
 
